@@ -42,6 +42,7 @@
     "./dialog": "./src/components/dialog.tsx",
     "./icons": "./src/components/icons.tsx",
     "./scroll-area": "./src/components/scroll-area.tsx",
+    "./separator": "./src/components/separator.tsx",
     "./upload-input": "./src/components/upload-input.tsx",
     "./tailwind.config": "./tailwind.config.ts",
     "./postcss": "./postcss.config.js"
@@ -55,6 +56,7 @@
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-select": "^2.1.1",
+    "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",

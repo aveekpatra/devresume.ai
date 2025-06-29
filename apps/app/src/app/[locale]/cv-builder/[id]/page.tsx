@@ -10,37 +10,37 @@ import { Badge } from "@v1/ui/badge";
 import { 
   Save, 
   Download, 
-  Share2, 
   ArrowLeft, 
   Eye,
-  Settings,
   Sparkles
 } from "lucide-react";
 import { CVEditor } from "../_components/cv-editor";
 import { CVPreview } from "../_components/cv-preview";
-import { AIAssistant } from "../_components/ai-assistant";
 import { TemplateSelector } from "../_components/template-selector";
+import { JobAnalysisPanel } from "../_components/job-analysis-panel";
+import { ATSOptimizationPanel } from "../_components/ats-optimization-panel";
+import { SmartContentEnhancer } from "../_components/smart-content-enhancer";
 import { toast } from "sonner";
 
 interface CVData {
   personalInfo: {
-    fullName: string;
-    email: string;
-    phone: string;
-    location: string;
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    location?: string;
     website?: string;
     linkedin?: string;
-    summary: string;
+    summary?: string;
   };
   experience: Array<{
     id: string;
     company: string;
     position: string;
-    location: string;
+    location?: string;
     startDate: string;
     endDate?: string;
     current: boolean;
-    description: string;
+    description?: string;
   }>;
   education: Array<{
     id: string;
@@ -76,10 +76,13 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
     skills: [],
   });
   const [activeSection, setActiveSection] = useState("personal");
-  const [showAIAssistant, setShowAIAssistant] = useState(false);
-  const [showPreview, setShowPreview] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [currentTemplateId, setCurrentTemplateId] = useState<string>();
+  const [jobAnalysisOpen, setJobAnalysisOpen] = useState(false);
+  const [jobAnalysis, setJobAnalysis] = useState<any>(null);
+  const [showPreview, setShowPreview] = useState(true);
+  const [showAITools, setShowAITools] = useState(false);
 
   // Fetch project data
   const project = useQuery(api.projects.getProject, { 
@@ -90,6 +93,9 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
   const existingCV = useQuery(api.cvs.getByProject, { 
     projectId: params.id as Id<"projects"> 
   });
+
+  // Fetch templates
+  const templates = useQuery(api.templates.list, {});
 
   // Mutations
   const createCV = useMutation(api.cvs.create);
@@ -105,17 +111,31 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
         skills: existingCV.skills,
       });
       setCurrentTemplateId(existingCV.templateId);
+      setHasUnsavedChanges(false); // Reset unsaved changes when loading existing data
     }
   }, [existingCV]);
 
-  // Auto-save functionality
+  // Track unsaved changes
   useEffect(() => {
-    const saveTimer = setTimeout(() => {
-      handleSave(false); // Silent save
-    }, 2000);
+    if (existingCV) {
+      setHasUnsavedChanges(true);
+    }
+  }, [cvData, currentTemplateId]);
 
-    return () => clearTimeout(saveTimer);
-  }, [cvData]);
+  // Keyboard shortcut for saving (Ctrl+S / Cmd+S)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault();
+        if (hasUnsavedChanges && !isSaving) {
+          handleSave(true);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [hasUnsavedChanges, isSaving]);
 
   const handleSave = async (showToast = true) => {
     if (!project) return;
@@ -146,6 +166,7 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
       if (showToast) {
         toast.success("CV saved successfully");
       }
+      setHasUnsavedChanges(false); // Reset unsaved changes after successful save
     } catch (error) {
       if (showToast) {
         toast.error("Failed to save CV");
@@ -258,8 +279,13 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
 
   const handleTemplateChange = (templateId: string) => {
     setCurrentTemplateId(templateId);
-    // Auto-save with new template
-    setTimeout(() => handleSave(false), 100);
+    setHasUnsavedChanges(true);
+    // Note: Template changes are not auto-saved - user must save manually
+  };
+
+  const handleCVUpdate = (newData: Partial<CVData>) => {
+    setCVData(prev => ({ ...prev, ...newData }));
+    setHasUnsavedChanges(true);
   };
 
   if (!project) {
@@ -289,9 +315,14 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
               Back to Dashboard
             </Button>
             <div className="flex flex-col">
-              <h1 className="text-lg font-semibold text-foreground">
-                {project.title}
-              </h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-semibold text-foreground">
+                  {project.title}
+                </h1>
+                {hasUnsavedChanges && !isSaving && (
+                  <span className="text-xs text-orange-600 font-medium">• Unsaved changes</span>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 <Badge variant="secondary">{project.status}</Badge>
                 {isSaving && (
@@ -301,9 +332,22 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Mobile view toggles */}
-            <div className="flex lg:hidden">
+          <div className="flex items-center gap-3">
+            {/* Template Selector */}
+            <TemplateSelector
+              currentTemplateId={currentTemplateId}
+              onTemplateSelect={handleTemplateChange}
+            />
+
+            {/* Job Analysis */}
+            <JobAnalysisPanel
+              isOpen={jobAnalysisOpen}
+              onOpenChange={setJobAnalysisOpen}
+              onAnalysisComplete={setJobAnalysis}
+            />
+
+            {/* Toggle Buttons */}
+            <div className="flex items-center gap-2">
               <Button
                 variant={showPreview ? "default" : "outline"}
                 size="sm"
@@ -313,63 +357,52 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
                 <Eye className="h-4 w-4" />
                 Preview
               </Button>
+              
+              <Button
+                variant={showAITools ? "default" : "outline"}
+                size="sm"
+                onClick={() => setShowAITools(!showAITools)}
+                className="flex items-center gap-2"
+              >
+                <Sparkles className="h-4 w-4" />
+                AI Tools
+              </Button>
             </div>
 
-            {/* Template Selector */}
-            <TemplateSelector
-              currentTemplateId={currentTemplateId}
-              onTemplateSelect={handleTemplateChange}
-            />
-
-            {/* AI Assistant Toggle */}
-            <Button
-              variant={showAIAssistant ? "default" : "outline"}
-              size="sm"
-              onClick={() => setShowAIAssistant(!showAIAssistant)}
-              className="flex items-center gap-2"
-            >
-              <Sparkles className="h-4 w-4" />
-              AI Assistant
-            </Button>
-
             {/* Action Buttons */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleSave(true)}
-              disabled={isSaving}
-              className="flex items-center gap-2"
-            >
-              <Save className="h-4 w-4" />
-              Save
-            </Button>
+            <div className="flex items-center gap-2 border-l pl-3">
+              <Button
+                size="sm"
+                onClick={() => handleSave(true)}
+                disabled={isSaving}
+                className={`flex items-center gap-2 ${
+                  hasUnsavedChanges 
+                    ? 'bg-orange-600 hover:bg-orange-700 text-white' 
+                    : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+                }`}
+              >
+                <Save className="h-4 w-4" />
+                {isSaving ? 'Saving...' : hasUnsavedChanges ? 'Save Changes' : 'Saved'}
+              </Button>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleShare}
-              className="flex items-center gap-2"
-            >
-              <Share2 className="h-4 w-4" />
-              Share
-            </Button>
-
-            <Button
-              size="sm"
-              onClick={handleExport}
-              className="flex items-center gap-2"
-            >
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExport}
+                className="flex items-center gap-2"
+              >
+                <Download className="h-4 w-4" />
+                Export
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Content Editor */}
-        <div className={`${showPreview ? 'w-1/2' : 'w-full'} border-r border-border bg-background transition-all duration-300 lg:w-1/2`}>
+      {/* Main Content - Unified View */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Panel - CV Editor */}
+        <div className={`${showPreview ? 'w-1/2' : 'flex-1'} overflow-hidden border-r`}>
           <CVEditor
             data={cvData}
             onChange={setCVData}
@@ -378,23 +411,50 @@ export default function CVBuilderPage({ params }: { params: { id: string } }) {
           />
         </div>
 
-        {/* Preview Panel */}
-        <div className={`${showPreview ? 'w-1/2' : 'hidden'} bg-muted/30 transition-all duration-300 lg:flex lg:w-1/2`}>
-          <CVPreview data={cvData} templateId={currentTemplateId} />
-        </div>
-
-        {/* AI Assistant Sidebar */}
-        {showAIAssistant && (
-          <div className="w-80 border-l border-border bg-card">
-            <AIAssistant
-              cvData={cvData}
-              activeSection={activeSection}
-              onSuggestionApply={(suggestion) => {
-                // TODO: Apply AI suggestions to CV data
-                toast.info("AI suggestion applied!");
-              }}
-              onClose={() => setShowAIAssistant(false)}
+        {/* Right Panel - Preview */}
+        {showPreview && (
+          <div className="w-1/2 overflow-hidden">
+            <CVPreview
+              data={cvData}
+              templateId={currentTemplateId}
             />
+          </div>
+        )}
+
+        {/* AI Tools Sidebar */}
+        {showAITools && (
+          <div className="w-80 border-l bg-muted/30 overflow-hidden">
+            <div className="h-full flex flex-col">
+              {/* ATS Optimization Section */}
+              <div className="border-b">
+                <div className="p-4">
+                  <h3 className="font-semibold text-sm mb-2">ATS Optimization</h3>
+                  <ATSOptimizationPanel
+                    cvData={cvData}
+                    jobAnalysis={jobAnalysis}
+                    onCVUpdate={handleCVUpdate}
+                    className="h-64"
+                  />
+                </div>
+              </div>
+
+              {/* Smart Content Enhancement Section */}
+              <div className="flex-1 overflow-hidden">
+                <div className="p-4 border-b">
+                  <h3 className="font-semibold text-sm">AI Content Enhancement</h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Get smart suggestions for your content
+                  </p>
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <SmartContentEnhancer
+                    cvData={cvData}
+                    jobAnalysis={jobAnalysis}
+                    onCVUpdate={handleCVUpdate}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

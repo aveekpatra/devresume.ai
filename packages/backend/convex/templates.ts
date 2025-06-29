@@ -9,16 +9,19 @@ export const list = query({
     isPremium: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("templates");
+    let templates;
     
     if (args.category) {
-      query = query.withIndex("by_category", (q) => q.eq("category", args.category));
+      templates = await ctx.db
+        .query("templates")
+        .withIndex("by_category", (q) => q.eq("category", args.category!))
+        .collect();
+    } else {
+      templates = await ctx.db.query("templates").collect();
     }
-
-    const templates = await query.collect();
     
     if (args.isPremium !== undefined) {
-      return templates.filter(template => template.isPremium === args.isPremium);
+      templates = templates.filter(template => template.isPremium === args.isPremium);
     }
     
     return templates.sort((a, b) => b.createdAt - a.createdAt);

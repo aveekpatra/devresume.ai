@@ -20,23 +20,23 @@ import {
 interface CVPreviewProps {
   data: {
     personalInfo: {
-      fullName: string;
-      email: string;
-      phone: string;
-      location: string;
+      fullName?: string;
+      email?: string;
+      phone?: string;
+      location?: string;
       website?: string;
       linkedin?: string;
-      summary: string;
+      summary?: string;
     };
     experience: Array<{
       id: string;
       company: string;
       position: string;
-      location: string;
+      location?: string;
       startDate: string;
       endDate?: string;
       current: boolean;
-      description: string;
+      description?: string;
     }>;
     education: Array<{
       id: string;
@@ -238,7 +238,7 @@ function SingleColumnLayout({ data, config }: { data: any; config: any }) {
             Professional Experience
           </h2>
           <div className="space-y-6">
-            {data.experience.map((exp) => (
+            {data.experience.map((exp: any) => (
               <div key={exp.id}>
                 <div className="flex justify-between items-start mb-2">
                   <div>
@@ -294,7 +294,7 @@ function SingleColumnLayout({ data, config }: { data: any; config: any }) {
             Education
           </h2>
           <div className="space-y-4">
-            {data.education.map((edu) => (
+            {data.education.map((edu: any) => (
               <div key={edu.id} className="flex justify-between items-start">
                 <div>
                   <h3 
@@ -339,7 +339,7 @@ function SingleColumnLayout({ data, config }: { data: any; config: any }) {
             Skills
           </h2>
           <div className="space-y-4">
-            {data.skills.map((skillGroup) => (
+            {data.skills.map((skillGroup: any) => (
               <div key={skillGroup.id}>
                 <h3 
                   className="font-semibold mb-2"
@@ -348,7 +348,7 @@ function SingleColumnLayout({ data, config }: { data: any; config: any }) {
                   {skillGroup.category}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {skillGroup.items.map((skill, index) => (
+                  {skillGroup.items.map((skill: string, index: number) => (
                     <span
                       key={index}
                       className="px-3 py-1 rounded-full text-sm font-medium"
@@ -407,11 +407,11 @@ function TwoColumnLayout({ data, config }: { data: any; config: any }) {
                 Skills
               </h2>
               <div className="space-y-4">
-                {data.skills.map((skillGroup) => (
+                {data.skills.map((skillGroup: any) => (
                   <div key={skillGroup.id}>
                     <h3 className="font-semibold mb-2 text-sm">{skillGroup.category}</h3>
                     <div className="space-y-1">
-                      {skillGroup.items.map((skill, index) => (
+                      {skillGroup.items.map((skill: string, index: number) => (
                         <div key={index} className="text-sm opacity-90">
                           {skill}
                         </div>
@@ -461,7 +461,7 @@ function TwoColumnLayout({ data, config }: { data: any; config: any }) {
                 Experience
               </h2>
               <div className="space-y-6">
-                {data.experience.map((exp) => (
+                {data.experience.map((exp: any) => (
                   <div key={exp.id}>
                     <div className="mb-2">
                       <h3 
@@ -512,7 +512,7 @@ function TwoColumnLayout({ data, config }: { data: any; config: any }) {
                 Education
               </h2>
               <div className="space-y-4">
-                {data.education.map((edu) => (
+                {data.education.map((edu: any) => (
                   <div key={edu.id}>
                     <h3 
                       className="text-lg font-semibold"
