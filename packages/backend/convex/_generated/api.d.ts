@@ -9,12 +9,15 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as cvs from "../cvs.js";
 import type * as email_index from "../email/index.js";
 import type * as email_templates_subscriptionEmail from "../email/templates/subscriptionEmail.js";
 import type * as env from "../env.js";
 import type * as http from "../http.js";
 import type * as init from "../init.js";
+import type * as projects from "../projects.js";
 import type * as subscriptions from "../subscriptions.js";
+import type * as templates from "../templates.js";
 import type * as users from "../users.js";
 import type * as utils_validators from "../utils/validators.js";
 import type * as web from "../web.js";
@@ -34,12 +37,15 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  cvs: typeof cvs;
   "email/index": typeof email_index;
   "email/templates/subscriptionEmail": typeof email_templates_subscriptionEmail;
   env: typeof env;
   http: typeof http;
   init: typeof init;
+  projects: typeof projects;
   subscriptions: typeof subscriptions;
+  templates: typeof templates;
   users: typeof users;
   "utils/validators": typeof utils_validators;
   web: typeof web;

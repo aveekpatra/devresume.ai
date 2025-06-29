@@ -6,11 +6,12 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
 import { ConvexClientProvider } from "../convex-client-provider";
 
 export const metadata: Metadata = {
-  title: "Create v1",
-  description: "Production ready Next.js app",
+  title: "DevResume.ai",
+  description: "Create professional CVs and cover letters with AI assistance",
 };
 
 export const viewport = {
@@ -42,6 +43,7 @@ export default function RootLayout({
           >
             <TooltipProvider delayDuration={0}>
               <ConvexClientProvider>{children}</ConvexClientProvider>
+              <Toaster richColors />
             </TooltipProvider>
           </ThemeProvider>
         </body>
