@@ -15,7 +15,7 @@ import { SubscribeForm } from "./subscribe-form";
 export function Header() {
   return (
     <header className="absolute top-0 w-full flex items-center justify-between p-4 z-10">
-      <span className="hidden md:block text-sm font-medium">convex-v1.run</span>
+      <span className="hidden md:block text-sm font-medium text-gray-300">convex-v1.run</span>
 
       <Link href="/">
         <Image
@@ -33,7 +33,7 @@ export function Header() {
           <li>
             <a
               href={process.env.NEXT_PUBLIC_APP_URL}
-              className="text-sm px-4 py-2 bg-primary text-secondary rounded-full font-medium"
+              className="text-sm px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-colors"
             >
               Sign in
             </a>
@@ -41,7 +41,7 @@ export function Header() {
           <li>
             <a
               href="https://github.com/get-convex/v1"
-              className="text-sm px-4 py-2 bg-primary text-secondary rounded-full font-medium"
+              className="text-sm px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-colors"
             >
               Github
             </a>
@@ -49,7 +49,7 @@ export function Header() {
           <li>
             <Dialog>
               <DialogTrigger
-                className="text-sm px-4 py-2 bg-secondary text-primary rounded-full font-medium cursor-pointer"
+                className="text-sm px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-full font-medium cursor-pointer hover:bg-gray-700 transition-colors"
                 asChild
               >
                 <span>Get updates</span>

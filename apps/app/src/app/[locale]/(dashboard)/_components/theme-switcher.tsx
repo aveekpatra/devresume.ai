@@ -18,7 +18,7 @@ export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
     >
       <SelectTrigger
         className={cn(
-          "h-6 rounded border-primary/20 bg-secondary !px-2 hover:border-primary/40",
+          "h-6 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 !px-2 hover:border-gray-400 dark:hover:border-gray-500",
           triggerClass,
         )}
       >
@@ -42,7 +42,7 @@ export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
           <SelectItem
             key={theme}
             value={theme}
-            className={`text-sm font-medium text-primary/60 ${theme === currentTheme && "text-primary"}`}
+            className={`text-sm font-medium text-gray-600 dark:text-gray-400 ${theme === currentTheme && "text-blue-600 dark:text-blue-400"}`}
           >
             {theme && theme.charAt(0).toUpperCase() + theme.slice(1)}
           </SelectItem>
@@ -64,11 +64,11 @@ export function ThemeSwitcherHome() {
           type="button"
         >
           {theme === "light" ? (
-            <Sun className="h-4 w-4 text-primary/80 hover:text-primary" />
+            <Sun className="h-4 w-4 text-blue-600 hover:text-blue-700" />
           ) : theme === "dark" ? (
-            <Moon className="h-4 w-4 text-primary/80 hover:text-primary" />
+            <Moon className="h-4 w-4 text-blue-600 hover:text-blue-700" />
           ) : (
-            <Monitor className="h-4 w-4 text-primary/80 hover:text-primary" />
+            <Monitor className="h-4 w-4 text-blue-600 hover:text-blue-700" />
           )}
         </button>
       ))}

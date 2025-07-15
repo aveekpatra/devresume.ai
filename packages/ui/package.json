@@ -17,11 +17,12 @@
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/postcss": "^4.1.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.43",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwindcss": "^3.4.10",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.0",
     "typescript": "^5.5.4"
   },
   "exports": {
@@ -44,6 +45,10 @@
     "./scroll-area": "./src/components/scroll-area.tsx",
     "./separator": "./src/components/separator.tsx",
     "./upload-input": "./src/components/upload-input.tsx",
+    "./tabs": "./src/components/tabs.tsx",
+    "./accordion": "./src/components/accordion.tsx",
+    "./sidebar": "./src/components/sidebar.tsx",
+    "./navigation-sidebar": "./src/components/navigation-sidebar.tsx",
     "./tailwind.config": "./tailwind.config.ts",
     "./postcss": "./postcss.config.js"
   },

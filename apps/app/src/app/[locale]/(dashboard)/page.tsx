@@ -73,30 +73,30 @@ export default function Page() {
   const isLoading = projects === undefined;
 
   return (
-    <div className="flex h-full w-full bg-secondary px-6 py-8 dark:bg-black">
+    <div className="flex h-full w-full bg-gray-100 dark:bg-black px-6 py-8">
       <div className="z-10 mx-auto flex h-full w-full max-w-screen-xl flex-col gap-6">
         
         {/* Header Section */}
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold text-foreground">DevResume.ai</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">DevResume.ai</h1>
+          <p className="text-gray-600 dark:text-gray-400">
             Create professional CVs and cover letters with AI assistance. Manage your career documents in organized projects.
           </p>
         </div>
 
         {/* Main Content */}
-        <div className="flex w-full flex-col rounded-lg border border-border bg-card dark:bg-card/50">
+        <div className="flex w-full flex-col rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50">
           
           {/* Project Header */}
           <div className="flex w-full flex-col rounded-lg p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col gap-2">
-                <h2 className="text-xl font-medium text-foreground">Your Projects</h2>
-                <p className="text-sm text-muted-foreground">
+                <h2 className="text-xl font-medium text-gray-900 dark:text-white">Your Projects</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Organize your CVs and cover letters into projects. Each project can contain multiple versions and variations.
                 </p>
               </div>
-              <Button onClick={() => setShowCreateModal(true)} className="flex items-center gap-2">
+              <Button onClick={() => setShowCreateModal(true)} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white">
                 <Plus className="h-4 w-4" />
                 Create New Project
               </Button>
@@ -105,19 +105,19 @@ export default function Page() {
 
           {/* Filters and Search */}
           <div className="flex w-full px-6">
-            <div className="w-full border-b border-border" />
+            <div className="w-full border-b border-gray-200 dark:border-gray-700" />
           </div>
           
           <div className="p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               {/* Search */}
               <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <Input
                   placeholder="Search projects..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white"
                 />
               </div>
 
@@ -125,7 +125,7 @@ export default function Page() {
               <div className="flex items-center gap-2">
                 {/* Status Filter */}
                 <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
-                  <SelectTrigger className="w-[140px]">
+                  <SelectTrigger className="w-[140px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white">
                     <Filter className="mr-2 h-4 w-4" />
                     <SelectValue />
                   </SelectTrigger>
@@ -143,7 +143,7 @@ export default function Page() {
                   setSortBy(field as any);
                   setSortOrder(order as any);
                 }}>
-                  <SelectTrigger className="w-[160px]">
+                  <SelectTrigger className="w-[160px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white">
                     <SortAsc className="mr-2 h-4 w-4" />
                     <SelectValue />
                   </SelectTrigger>
@@ -164,8 +164,8 @@ export default function Page() {
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4" />
-                  <p className="text-muted-foreground">Loading projects...</p>
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent mx-auto mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400">Loading projects...</p>
                 </div>
               </div>
             ) : projects && projects.length > 0 ? (
@@ -180,21 +180,21 @@ export default function Page() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-card hover:border-primary/40 mb-4">
-                  <Plus className="h-8 w-8 stroke-[1.5px] text-primary/60" />
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-800 hover:border-blue-400 dark:hover:border-blue-600 mb-4">
+                  <Plus className="h-8 w-8 stroke-[1.5px] text-blue-600" />
                 </div>
                 <div className="text-center max-w-md">
-                  <h3 className="text-lg font-medium text-foreground mb-2">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                     {searchQuery || statusFilter !== "all" ? "No projects found" : "No projects yet"}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                     {searchQuery || statusFilter !== "all" 
                       ? "Try adjusting your search or filter criteria."
                       : "Create your first project to get started with building your CV and cover letters."
                     }
                   </p>
                   {!searchQuery && statusFilter === "all" && (
-                    <Button onClick={() => setShowCreateModal(true)} className="flex items-center gap-2">
+                    <Button onClick={() => setShowCreateModal(true)} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white">
                       <Plus className="h-4 w-4" />
                       Create Your First Project
                     </Button>

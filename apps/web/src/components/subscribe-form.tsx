@@ -12,7 +12,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" className="ml-auto rounded-full">
+    <Button type="submit" className="ml-auto rounded-full bg-white text-black hover:bg-gray-200">
       {pending ? <Icons.Loader className="size-4" /> : "Subscribe"}
     </Button>
   );
@@ -32,7 +32,7 @@ export function SubscribeForm({ group, placeholder, className }: Props) {
     <div>
       <div>
         {isSubmitted ? (
-          <div className="border border-[#2C2C2C] text-sm text-primary h-9 w-[290px] flex items-center py-0.5 px-2 justify-between">
+          <div className="border border-gray-700 text-sm text-white h-9 w-[290px] flex items-center py-0.5 px-2 justify-between bg-gray-900 rounded">
             <p>Subscribed</p>
 
             <svg
@@ -45,6 +45,7 @@ export function SubscribeForm({ group, placeholder, className }: Props) {
               <path
                 d="m14.546 4.724-8 8-3.667-3.667.94-.94 2.727 2.72 7.06-7.053.94.94Z"
                 fill="currentColor"
+                className="text-green-400"
               />
             </svg>
           </div>
@@ -71,7 +72,7 @@ export function SubscribeForm({ group, placeholder, className }: Props) {
               autoComplete="email"
               aria-label="Email address"
               required
-              className={className}
+              className={`bg-gray-900 border-gray-700 text-white placeholder:text-gray-400 focus:border-gray-500 ${className}`}
             />
 
             <SubmitButton />

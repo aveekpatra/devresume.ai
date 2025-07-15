@@ -11,7 +11,7 @@ export function SignOut() {
     <Button
       onClick={signOut}
       variant="outline"
-      className="font-mono gap-2 flex items-center"
+      className="font-mono gap-2 flex items-center bg-white dark:bg-gray-800 text-black dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
     >
       <Icons.SignOut className="size-4" />
       <span>Sign out</span>

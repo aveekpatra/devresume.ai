@@ -26,7 +26,7 @@ export default async function Layout({
     { token: await convexAuthNextjsToken() },
   );
   return (
-    <div className="flex min-h-[100vh] w-full flex-col bg-secondary dark:bg-black">
+    <div className="flex min-h-[100vh] w-full flex-col bg-gray-100 dark:bg-black">
       <Navigation
         preloadedUser={preloadedUser}
         preloadedProducts={preloadedProducts}

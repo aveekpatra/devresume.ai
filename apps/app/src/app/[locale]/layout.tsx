@@ -28,16 +28,16 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexAuthNextjsServerProvider>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning className="dark">
         <body
           className={cn(
             `${GeistSans.variable} ${GeistMono.variable}`,
-            "antialiased",
+            "antialiased bg-black text-white min-h-screen",
           )}
         >
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
